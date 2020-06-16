@@ -47,11 +47,12 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
             # Iterate over data.
             for inputs, labels, masks in tqdm(dataloaders[phase]):
                 inputs = inputs.to(device)
-                
+
                 labels = labels.to(device)
                 label_size = labels.shape[-1]
                 target_size = params["label_size"]
                 offset = (label_size - target_size)//2
+
                 labels = labels[:,offset:offset+target_size,offset:offset+target_size]
 
                 masks = masks.to(device)
@@ -68,11 +69,9 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
                     outputs = outputs.squeeze()
                     preds = s(outputs) >= 0.5
                     preds = preds.float()
-
                     outputs_masked = torch.masked_select(outputs, masks)
                     labels_masked = torch.masked_select(labels, masks)
                     preds_masked = torch.masked_select(preds, masks)
-
                     loss = criterion(outputs_masked, labels_masked)
 
                     # backward + optimize only if in training phase
@@ -89,8 +88,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
 
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
-            epoch_segacc = running_corrects_full.double() / (dataset_sizes[phase] * params["label_size"]**2)
-
+            epoch_segacc = running_corrects_full.double() / (dataset_sizes[phase] * (params["label_size"])**2)
             metrics[phase+'_loss'].append(epoch_loss)
             metrics[phase+'_acc'].append(float(epoch_acc.cpu().numpy()))
             metrics[phase+'_segacc'].append(float(epoch_segacc.cpu().numpy()))
@@ -107,8 +105,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
         print()
         
     time_elapsed = time.time() - t0
-    print('Training complete in {:.0f}m {:.0f}s'.format(
-        time_elapsed // 60, time_elapsed % 60))
+    print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val single pixel accuracy: {:4f}'.format(best_acc))
     print('Corresponding val full segmentation accuracy: {:.4f}'.format(best_segacc))
 

@@ -27,46 +27,50 @@ parser.add_argument('--gpu', type=int, default=0)
 args = parser.parse_args()
 
 # model and dataset hyperparameters
-param_file = os.path.join(args.model_dir, 'params.json')
+param_file = os.path.join(args.model_dir, 'params_naip.json')
+#param_file = os.path.join(args.model_dir, 'params.json')
+
 with open(param_file) as f:
     params = json.load(f)
 
 # dataloaders
-train_files = []
-val_files = []
-with open(params['train_file']) as f:
-    for l in f:
-        if '.npy' in l:
-            train_files.append(l[:-1])
-with open(params['val_file']) as f:
-    for l in f:
-        if '.npy' in l:
-            val_files.append(l[:-1])
+
+from glob import glob
+files = glob(os.path.join(params['tile_dir'], '*.npy'))
+
+train_val_idx = np.random.choice(np.arange(0,len(files)), params['n_train']+params['n_val'], replace=False)
+train_idx = train_val_idx[0:params['n_train']]
+val_idx   = train_val_idx[params['n_train']:]
+
+train_files = [os.path.basename(files[i]) for i in train_idx]
+val_files   = [os.path.basename(files[i]) for i in val_idx]
+
 
 dataloaders = {}
 dataloaders['train'] = masked_tile_dataloader(params['tile_dir'], 
                                               train_files,
-                                              params['mask_dir'],
-                                              augment=True, 
+                                              augment=True,
                                               batch_size=params['batch_size'], 
                                               shuffle=params['shuffle'], 
                                               num_workers=params['num_workers'], 
-                                              n_samples=params['n_train'])
+                                              n_samples=params['n_train'],
+                                              im_size  = params['label_size']+2)
+
 dataloaders['val'] = masked_tile_dataloader(params['tile_dir'],
                                             val_files,
-                                            params['mask_dir'],
                                             augment=False,
                                             batch_size=params['batch_size'],
                                             shuffle=params['shuffle'],
                                             num_workers=params['num_workers'], 
-                                            n_samples=params['n_val'])
+                                            n_samples=params['n_val'],
+                                            im_size  = params['label_size']+2)
 dataset_sizes = {}
 dataset_sizes['train'] = len(train_files)
 dataset_sizes['val'] = len(val_files)
 
 device = torch.device("cuda:"+str(args.gpu) if torch.cuda.is_available() else "cpu")
 
-model = UNet(in_channels=7, out_channels=1, 
+model = UNet(in_channels=params['in_channels'], out_channels=1,
              starting_filters=params['starting_filters'], 
              bn_momentum=params['bn_momentum'])
 
