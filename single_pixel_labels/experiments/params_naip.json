@@ -2,15 +2,15 @@
   "model": "unet",
   "run": "run0",
 
-  "tile_dir": "/home/bjohnson/projects/naip_collect/data/states/mo/",
+  "tile_dir": "/home/bjohnson/projects/naip_collect/data/states/in/",
   "train_file": "/home/ebarnett/weakly_supervised/data/splits/train_files_numpy",
   "val_file": "/home/ebarnett/weakly_supervised/data/splits/val_files_numpy",
   "mask_dir": "/home/ebarnett/weakly_supervised/data/masks",
   "n_train": 100,
-  "n_val": 100,
+  "n_val": 500,
 
   "layers": 4,
-  "label_size": 48,
+  "label_size": 128,
   "batch_size": 32,
   "shuffle": true,
   "num_workers": 4,

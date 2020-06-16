@@ -85,7 +85,8 @@ class MaskedTileDataset_naip(Dataset):
             tile = self.transform(tile)
         features = tile[:4, :, :]
 
-        label = tile[-2, :, :] * 10000
+        label = tile[-2, :, :]
+
         label = cdl_to_binary(label)
         label = label.float()
 

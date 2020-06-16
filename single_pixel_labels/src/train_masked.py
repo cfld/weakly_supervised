@@ -54,7 +54,6 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
                 offset = (label_size - target_size)//2
 
                 labels = labels[:,offset:offset+target_size,offset:offset+target_size]
-
                 masks = masks.to(device)
                 masks = masks[:,offset:offset+target_size,offset:offset+target_size]
 
