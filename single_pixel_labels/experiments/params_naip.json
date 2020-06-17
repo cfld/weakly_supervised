@@ -6,12 +6,12 @@
   "train_file": "/home/ebarnett/weakly_supervised/data/splits/train_files_numpy",
   "val_file": "/home/ebarnett/weakly_supervised/data/splits/val_files_numpy",
   "mask_dir": "/home/ebarnett/weakly_supervised/data/masks",
-  "n_train": 100,
+  "n_train": 10,
   "n_val": 500,
 
   "layers": 4,
   "label_size": 128,
-  "batch_size": 32,
+  "batch_size": 16,
   "shuffle": true,
   "num_workers": 4,
   "in_channels": 4,
@@ -25,7 +25,7 @@
   "weight_decay": 0.0,
   "decay_steps": 100000,
   "gamma": 0.9,
-  "save_model": true,
+  "save_model": false,
 
   "visdom_every": 100
 }

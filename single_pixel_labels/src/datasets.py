@@ -64,7 +64,7 @@ class MaskedTileDataset_naip(Dataset):
         self.im_size   = im_size
 
         # Generate a set of mask points which remain fixed
-        self.masks_pix = {i: np.random.randint(1,im_size-1,2) for i in range(len(self.tile_files))}
+        self.masks_pix = {i: np.random.randint(0,im_size,2) for i in range(len(self.tile_files))}
 
     def __len__(self):
         if self.n_samples:
