@@ -71,7 +71,7 @@ class UpBlock(nn.Module):
 
 class ResNetUNet(nn.Module):
     DEPTH=6
-    def __init__(self, encoder, n_class=2):
+    def __init__(self, encoder, n_class=2, in_channels=4):
         super().__init__()
 
         down_blocks = []
@@ -93,7 +93,7 @@ class ResNetUNet(nn.Module):
                                  out_channels=128,
                                  up_conv_in_channels=256,
                                  up_conv_out_channels=128))
-        up_blocks.append(UpBlock(in_channels=64 + 4,
+        up_blocks.append(UpBlock(in_channels=64 + in_channels,
                                  out_channels=64,
                                  up_conv_in_channels=128,
                                  up_conv_out_channels=64))

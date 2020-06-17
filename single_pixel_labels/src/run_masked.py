@@ -43,12 +43,14 @@ parser.add_argument('--results_dir', type=str)
 parser.add_argument('--seed', type=int)
 parser.add_argument('--n_train', type=int)
 parser.add_argument('--label_size', type=int)
+parser.add_argument('--pretrained_model_path', default='/home/bjohnson/projects/moco/models/naip/checkpoint_0050.pth.tar')
+parser.add_argument('--param_file', default = '/home/ebarnett/weakly_supervised/single_pixel_labels/experiments/params_naip.json')
 args = parser.parse_args()
 
 set_seeds(args.seed)
 
 # model and dataset hyperparameters
-param_file = os.path.join(args.model_dir, 'params_naip.json')
+param_file = os.path.join(args.param_file)
 
 with open(param_file) as f:
     params = json.load(f)
@@ -98,10 +100,10 @@ device = torch.device("cuda:"+str(args.gpu) if torch.cuda.is_available() else "c
 
 backbone = resnet50(in_channels=params['in_channels'], num_classes=128)
 if args.pretrained:
-    backbone = get_pretrained_resnet(backbone, model_path='/home/bjohnson/projects/moco/models/naip/checkpoint_0050.pth.tar')
-    params['lr'] = .0003
+    backbone = get_pretrained_resnet(backbone, model_path=args.pretrained_model_path)
+    params['beta1'] = 0
 backbone = nn.Sequential(*list(backbone.children()))[:-1]
-model = ResNetUNet(backbone, n_class=1)
+model = ResNetUNet(backbone, n_class=1, in_channels=params['in_channels'])
 
 
 model = model.to(device)

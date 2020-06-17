@@ -13,7 +13,7 @@ from torchvision import models
 
 from tqdm import tqdm
 
-def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, params, num_epochs=20, gpu=0):
+def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, scheduler, params, num_epochs=20, gpu=0, cutoff=0.5):
     """
     Trains a model for all epochs using the provided dataloader.
     """
@@ -63,7 +63,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     outputs = outputs.squeeze()
-                    preds = s(outputs) >= 0.5
+                    preds = s(outputs) >= cutoff
                     preds = preds.float()
                     outputs_masked = torch.masked_select(outputs, masks)
                     labels_masked = torch.masked_select(labels, masks)
