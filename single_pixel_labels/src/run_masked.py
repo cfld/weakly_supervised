@@ -100,8 +100,8 @@ device = torch.device("cuda:"+str(args.gpu) if torch.cuda.is_available() else "c
 
 backbone = resnet50(in_channels=params['in_channels'], num_classes=128)
 if args.pretrained:
+    print("getting pretrained")
     backbone = get_pretrained_resnet(backbone, model_path=args.pretrained_model_path)
-    params['beta1'] = 0
 backbone = nn.Sequential(*list(backbone.children()))[:-1]
 model = ResNetUNet(backbone, n_class=1, in_channels=params['in_channels'])
 

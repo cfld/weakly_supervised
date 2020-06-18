@@ -89,6 +89,7 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
             metrics[phase+'_acc'].append(float(epoch_acc.cpu().numpy()))
             metrics[phase+'_segacc'].append(float(epoch_segacc.cpu().numpy()))
 
+
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc

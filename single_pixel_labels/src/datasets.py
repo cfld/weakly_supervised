@@ -86,7 +86,7 @@ class MaskedTileDataset_naip(Dataset):
         features = (tile[:4, :, :] - NAIP_BAND_STATS['mean'].transpose(2,0,1))/NAIP_BAND_STATS['std'].transpose(2,0,1)
         features = features.float()
 
-        label = tile[-2, :, :]
+        label = tile[4, :, :]
         label = cdl_to_binary(label)
         label = label.float()
 
@@ -130,7 +130,7 @@ class MaskedTileDataset_sentinel(Dataset):
         features = (tile[:12, :, :] - SENTINEL_BAND_STATS['mean'].transpose(2,0,1))/SENTINEL_BAND_STATS['std'].transpose(2,0,1)
         features = features.float()
 
-        label = tile[-2, :, :]
+        label = tile[13, :, :] * 10000
         label = cdl_to_binary(label)
         label = label.float()
 

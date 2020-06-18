@@ -2,7 +2,7 @@
   "model": "unet",
   "run": "run0",
 
-  "tile_dir": "/raid/users/ebarnett/sentinel/cities/hou",
+  "tile_dir": "/raid/users/ebarnett/sentinel/states/in/",
   "train_file": "/home/ebarnett/weakly_supervised/data/splits/train_files_numpy",
   "val_file": "/home/ebarnett/weakly_supervised/data/splits/val_files_numpy",
   "mask_dir": "/home/ebarnett/weakly_supervised/data/masks",
@@ -11,12 +11,12 @@
 
   "layers": 4,
   "label_size": 128,
-  "batch_size": 8,
+  "batch_size": 4,
   "shuffle": true,
   "num_workers": 4,
   "in_channels": 12,
 
-  "epochs": 50,
+  "epochs": 20,
   "starting_filters": 32,
   "bn_momentum": 0.1,
   "lr": 0.001,
